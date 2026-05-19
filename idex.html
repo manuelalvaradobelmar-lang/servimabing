@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SERVIMABING SPA — Mantenciones · Reparaciones · Maestranza</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+  :root {
+    --gold: #E8A020;
+    --gold-light: #F5C35A;
+    --navy: #0B1929;
+    --navy-mid: #112240;
+    --navy-light: #1a3055;
+    --steel: #2a4a6b;
+    --text: #e8f0f8;
+    --text-muted: #7a9bbf;
+    --text-dim: #4a6a8a;
+    --border: rgba(100,160,220,0.15);
+    --border-strong: rgba(100,160,220,0.3);
+    --card-bg: rgba(17,34,64,0.7);
+    --radius: 10px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: var(--navy);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ─── BACKGROUND TEXTURE ─── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 20% 20%, rgba(14,40,80,0.5) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 80%, rgba(232,160,32,0.06) 0%, transparent 60%);
+    pointer-events: none; z-index: 0;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2.5rem;
+    height: 64px;
+    background: rgba(11,25,41,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.5rem; font-weight: 800;
+    letter-spacing: 1px;
+    color: #fff;
+  }
+  .nav-logo span { color: var(--gold); }
+
+  .nav-links { display: flex; gap: 2rem; }
+  .nav-links a {
+    font-size: 13px; font-weight: 500;
+    color: var(--text-muted);
+    text-decoration: none;
+    letter-spacing: 0.5px;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+
+  .nav-cta {
+    background: var(--gold); color: var(--navy);
+    padding: 8px 20px; border-radius: var(--radius);
+    font-size: 13px; font-weight: 600;
+    text-decoration: none; border: none; cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    letter-spacing: 0.3px;
+  }
+  .nav-cta:hover { background: var(--gold-light); transform: translateY(-1px); }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 6rem 2rem 4rem;
+    position: relative; z-index: 1;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(232,160,32,0.12);
+    border: 1px solid rgba(232,160,32,0.3);
+    color: var(--gold);
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 6px 16px; border-radius: 20px;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(3.5rem, 10vw, 7rem);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -1px;
+    color: #fff;
+    margin-bottom: 0.4rem;
+  }
+  .hero h1 .gold { color: var(--gold); }
+  .hero h1 .outline {
+    -webkit-text-stroke: 2px rgba(255,255,255,0.25);
+    color: transparent;
+  }
+
+  .hero-tagline {
+    font-size: 1.1rem; font-weight: 300;
+    color: var(--text-muted);
+    max-width: 580px;
+    margin: 1.2rem auto 0.5rem;
+    line-height: 1.7;
+  }
+  .hero-services-inline {
+    font-size: 0.8rem; font-weight: 500;
+    color: var(--text-dim);
+    letter-spacing: 2px; text-transform: uppercase;
+    margin-bottom: 2rem;
+  }
+  .hero-services-inline span { color: var(--gold); margin: 0 6px; }
+
+  .hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--gold); color: var(--navy);
+    padding: 14px 32px; border-radius: var(--radius);
+    font-size: 14px; font-weight: 700;
+    text-decoration: none; border: none; cursor: pointer;
+    transition: all 0.2s; letter-spacing: 0.3px;
+  }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(232,160,32,0.3); }
+
+  .btn-outline {
+    background: transparent; color: var(--text);
+    padding: 14px 32px; border-radius: var(--radius);
+    font-size: 14px; font-weight: 500;
+    text-decoration: none; cursor: pointer;
+    border: 1px solid var(--border-strong);
+    transition: all 0.2s;
+  }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+  .hero-meta {
+    margin-top: 3rem;
+    display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap;
+  }
+  .hero-meta-item {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; color: var(--text-dim);
+  }
+  .hero-meta-item i { color: var(--gold); font-size: 14px; }
+
+  /* ─── SECTION ─── */
+  section {
+    position: relative; z-index: 1;
+    padding: 5rem 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-eyebrow {
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 2px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 0.5rem;
+  }
+  .section-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+  }
+  .section-body {
+    font-size: 15px; color: var(--text-muted);
+    max-width: 600px; line-height: 1.8;
+    margin-bottom: 3rem;
+  }
+
+  /* ─── STATS ─── */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--border);
+    margin-bottom: 5rem;
+  }
+  .stat {
+    background: var(--card-bg);
+    padding: 2rem 1.5rem;
+    text-align: center;
+  }
+  .stat .n {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 2.8rem; font-weight: 800;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .stat .l { font-size: 12px; color: var(--text-muted); line-height: 1.3; }
+
+  /* ─── SERVICES ─── */
+  .tabs-row {
+    display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.5rem;
+  }
+  .tab {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px; font-weight: 600; letter-spacing: 0.5px;
+    padding: 8px 20px; border-radius: 6px; cursor: pointer;
+    border: 1px solid var(--border);
+    background: transparent; color: var(--text-muted);
+    transition: all 0.2s;
+  }
+  .tab:hover { border-color: var(--gold); color: var(--gold); }
+  .tab.active {
+    background: var(--gold); color: var(--navy);
+    border-color: var(--gold);
+  }
+
+  .srv-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+  }
+  .srv-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.4rem;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .srv-card:hover { border-color: var(--gold); transform: translateY(-3px); }
+  .srv-icon {
+    width: 44px; height: 44px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; margin-bottom: 10px;
+    background: rgba(232,160,32,0.12);
+    color: var(--gold);
+  }
+  .srv-card h3 { font-size: 14px; font-weight: 600; color: #fff; margin-bottom: 4px; }
+  .srv-card p { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+
+  /* ─── MV ─── */
+  .mv-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 12px; margin-bottom: 3rem;
+  }
+  .mv-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2rem;
+  }
+  .mv-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 10px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .mv-card p { font-size: 14px; color: var(--text-muted); line-height: 1.7; }
+
+  /* ─── ABOUT ─── */
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 3rem; align-items: center;
+  }
+  @media (max-width: 700px) { .about-grid { grid-template-columns: 1fr; } }
+  .about-text p { font-size: 15px; color: var(--text-muted); line-height: 1.8; margin-bottom: 1rem; }
+  .check-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .check-list li {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 14px; color: var(--text);
+  }
+  .check-list li i { color: var(--gold); font-size: 16px; flex-shrink: 0; }
+
+  /* ─── SECURITY ─── */
+  .seg-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+  }
+  .seg-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.4rem;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .seg-card i { font-size: 24px; color: var(--gold); }
+  .seg-card p { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+
+  /* ─── CLIENTS ─── */
+  .clients-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+  }
+  .client-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.4rem 1rem;
+    text-align: center;
+    transition: border-color 0.2s;
+  }
+  .client-card:hover { border-color: var(--gold); }
+  .client-card i { font-size: 26px; color: var(--gold); display: block; margin-bottom: 8px; }
+  .client-card .cname { font-size: 13px; font-weight: 600; color: #fff; }
+  .client-card .ctype { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+
+  /* ─── CERT ─── */
+  .cert-bar {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem 2rem;
+    display: flex; align-items: center; gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-top: 3rem;
+  }
+  .cert-bar i { font-size: 40px; color: var(--gold); }
+  .cert-bar div h4 { font-size: 15px; font-weight: 600; color: #fff; }
+  .cert-bar div p { font-size: 13px; color: var(--text-muted); }
+
+  /* ─── CONTACT ─── */
+  .contact-section {
+    background: var(--navy-mid);
+    border-top: 1px solid var(--border);
+    padding: 5rem 2rem;
+  }
+  .contact-inner { max-width: 1100px; margin: 0 auto; }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px; margin-top: 2rem;
+  }
+  .c-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.2rem;
+    display: flex; align-items: center; gap: 12px;
+    transition: border-color 0.2s;
+  }
+  .c-card:hover { border-color: var(--gold); }
+  .c-card i { font-size: 22px; color: var(--gold); flex-shrink: 0; }
+  .c-card .c-lbl { font-size: 11px; color: var(--text-dim); margin-bottom: 2px; }
+  .c-card .c-val { font-size: 13px; font-weight: 500; color: #fff; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--navy);
+    border-top: 1px solid var(--border);
+    padding: 2rem;
+    text-align: center;
+    font-size: 12px; color: var(--text-dim);
+  }
+  footer strong { color: var(--gold); }
+
+  /* ─── DIVIDER ─── */
+  .divider {
+    max-width: 1100px; margin: 0 auto;
+    border: none; border-top: 1px solid var(--border);
+  }
+
+  /* ─── SCROLL ANIM ─── */
+  .reveal {
+    opacity: 0; transform: translateY(28px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  @media (max-width: 768px) {
+    nav { padding: 0 1.2rem; }
+    .nav-links { display: none; }
+    section { padding: 3.5rem 1.2rem; }
+  }
+
+  /* ─── MODAL ─── */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 999;
+    background: rgba(6,14,26,0.88);
+    backdrop-filter: blur(8px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 1.5rem;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+  .modal {
+    background: var(--navy-mid);
+    border: 1px solid var(--border-strong);
+    border-radius: 14px;
+    padding: 2.5rem;
+    width: 100%; max-width: 680px;
+    max-height: 90vh; overflow-y: auto;
+    transform: translateY(24px);
+    transition: transform 0.3s;
+    position: relative;
+  }
+  .modal-overlay.open .modal { transform: translateY(0); }
+
+  .modal-header {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    margin-bottom: 1.8rem;
+  }
+  .modal-header h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.8rem; font-weight: 700; color: #fff;
+    line-height: 1.1;
+  }
+  .modal-header h2 span { color: var(--gold); }
+  .modal-header p { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+  .modal-close {
+    background: rgba(255,255,255,0.08); border: none;
+    color: var(--text-muted); font-size: 20px;
+    width: 36px; height: 36px; border-radius: 8px;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: background 0.2s, color 0.2s;
+  }
+  .modal-close:hover { background: rgba(255,255,255,0.15); color: #fff; }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px; margin-bottom: 12px;
+  }
+  .form-row.full { grid-template-columns: 1fr; }
+  @media (max-width: 520px) { .form-row { grid-template-columns: 1fr; } }
+
+  .form-group { display: flex; flex-direction: column; gap: 5px; }
+  .form-group label {
+    font-size: 12px; font-weight: 500;
+    color: var(--text-muted); letter-spacing: 0.3px;
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border-strong);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 14px; font-family: 'Barlow', sans-serif;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .form-group input::placeholder,
+  .form-group textarea::placeholder { color: var(--text-dim); }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: var(--gold);
+    background: rgba(232,160,32,0.05);
+  }
+  .form-group select option { background: var(--navy-mid); color: var(--text); }
+  .form-group textarea { resize: vertical; min-height: 110px; }
+
+  .form-submit {
+    margin-top: 1.4rem;
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  }
+  .form-submit button {
+    background: var(--gold); color: var(--navy);
+    border: none; padding: 13px 32px;
+    border-radius: var(--radius);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 16px; font-weight: 700;
+    letter-spacing: 0.5px; cursor: pointer;
+    display: flex; align-items: center; gap: 8px;
+    transition: all 0.2s;
+  }
+  .form-submit button:hover { background: var(--gold-light); transform: translateY(-1px); }
+  .form-submit .form-note {
+    font-size: 12px; color: var(--text-dim); line-height: 1.4;
+  }
+
+  .form-success {
+    text-align: center; padding: 2rem 1rem;
+    display: none;
+  }
+  .form-success i { font-size: 52px; color: #4ade80; margin-bottom: 12px; display: block; }
+  .form-success h3 { font-size: 1.3rem; font-weight: 600; color: #fff; margin-bottom: 6px; }
+  .form-success p { font-size: 14px; color: var(--text-muted); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">SERVI<span>MABING</span> SPA</div>
+  <div class="nav-links">
+    <a href="#servicios">Servicios</a>
+    <a href="#nosotros">Nosotros</a>
+    <a href="#clientes">Clientes</a>
+    <a href="#contacto">Contacto</a>
+  </div>
+  <a href="#contacto" class="nav-cta">Cotizar ahora</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">
+    <i class="ti ti-map-pin"></i>
+    Antofagasta, Chile · Desde 2019
+  </div>
+  <h1>
+    <span class="gold">SERVI</span><span class="outline">MABING</span><br>
+    <span style="font-size:55%">SPA</span>
+  </h1>
+  <div class="hero-tagline">
+    Empresa familiar especializada en metalmecánica, mantención industrial, fabricación de piezas y servicios para la gran minería del norte de Chile.
+  </div>
+  <div class="hero-services-inline">
+    Reparaciones<span>·</span>Ventas<span>·</span>Gráficas<span>·</span>Mantenciones<span>·</span>Maestranza
+  </div>
+  <div class="hero-btns">
+    <a href="#contacto" class="btn-primary">Solicitar cotización</a>
+    <a href="#servicios" class="btn-outline">Ver servicios</a>
+  </div>
+  <div class="hero-meta">
+    <div class="hero-meta-item"><i class="ti ti-certificate"></i> Certificados SICEP</div>
+    <div class="hero-meta-item"><i class="ti ti-id-badge"></i> RUT 77.204.957-9</div>
+    <div class="hero-meta-item"><i class="ti ti-clock-24"></i> Atención 24/7</div>
+  </div>
+</div>
+
+<!-- STATS -->
+<section style="padding-top:0">
+  <div class="stats-row reveal">
+    <div class="stat"><div class="n">+5</div><div class="l">Años de<br>experiencia</div></div>
+    <div class="stat"><div class="n">7+</div><div class="l">Grandes clientes<br>satisfechos</div></div>
+    <div class="stat"><div class="n">3</div><div class="l">Áreas principales<br>de servicio</div></div>
+    <div class="stat"><div class="n">24/7</div><div class="l">Disponibilidad<br>de urgencia</div></div>
+    <div class="stat"><div class="n">SICEP</div><div class="l">Certificación<br>vigente</div></div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- SERVICIOS -->
+<section id="servicios">
+  <div class="section-eyebrow reveal">Nuestros servicios</div>
+  <div class="section-title reveal">Todo lo que necesita<br>su operación industrial</div>
+  <div class="section-body reveal">
+    Cubrimos desde trabajos en taller hasta intervenciones en terreno, ventas de repuestos y fabricación de gráficas viales. Un solo proveedor para todas sus necesidades.
+  </div>
+
+  <div class="tabs-row reveal" id="tabs">
+    <button class="tab active" data-cat="taller">Taller</button>
+    <button class="tab" data-cat="terreno">Terreno</button>
+    <button class="tab" data-cat="ventas">Ventas</button>
+    <button class="tab" data-cat="logistica">Logística</button>
+    <button class="tab" data-cat="graficas">Gráficas</button>
+  </div>
+
+  <div class="srv-grid reveal" id="srv-grid"></div>
+</section>
+
+<hr class="divider">
+
+<!-- MISION VISION -->
+<section id="nosotros">
+  <div class="section-eyebrow reveal">Misión y Visión</div>
+  <div class="section-title reveal">Liderazgo con<br>integridad</div>
+  <div class="mv-grid reveal">
+    <div class="mv-card">
+      <div class="mv-label"><i class="ti ti-target"></i> Misión</div>
+      <p>Ser líderes de confianza en la industria, proporcionando soluciones de mantención y fabricación que superen las expectativas de nuestros clientes. Nuestro enfoque en la excelencia, la seguridad y la sostenibilidad impulsa nuestra búsqueda constante de la mejora continua.</p>
+    </div>
+    <div class="mv-card">
+      <div class="mv-label"><i class="ti ti-eye"></i> Visión</div>
+      <p>Ser agentes de cambio en la industria de servicios de mantención y fabricación, impulsando la innovación y la sostenibilidad. Ser pioneros en soluciones que no solo satisfagan las necesidades presentes, sino que también allanen el camino hacia un futuro más seguro y sostenible.</p>
+    </div>
+  </div>
+
+  <!-- QUIENES SOMOS -->
+  <div class="about-grid reveal">
+    <div class="about-text">
+      <div class="section-eyebrow" style="margin-bottom:0.4rem">¿Quiénes somos?</div>
+      <h2 style="font-family:'Barlow Condensed',sans-serif;font-size:2rem;font-weight:700;color:#fff;margin-bottom:1rem;line-height:1.1">Empresa familiar<br>con vocación industrial</h2>
+      <p>Somos una empresa familiar fundada en 2019, con 5 años de experiencia en servicios de metalmecánica en maestranza, mantención industrial en terreno, venta de repuestos y ferretería.</p>
+      <p>Contamos con infraestructura propia, vehículos y personal capacitado y calificado para asumir en forma eficiente los requerimientos de nuestros clientes en la región de Antofagasta y el norte de Chile.</p>
+    </div>
+    <ul class="check-list">
+      <li><i class="ti ti-check"></i> Empresa familiar con valores sólidos</li>
+      <li><i class="ti ti-check"></i> Infraestructura y vehículos propios</li>
+      <li><i class="ti ti-check"></i> Personal técnico certificado y calificado</li>
+      <li><i class="ti ti-check"></i> Servicio en taller y en terreno (faenas)</li>
+      <li><i class="ti ti-check"></i> Certificados en SICEP para gran minería</li>
+      <li><i class="ti ti-check"></i> Logística y arriendo de grúa horquilla</li>
+      <li><i class="ti ti-check"></i> Atención rápida en emergencias</li>
+    </ul>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- SEGURIDAD -->
+<section>
+  <div class="section-eyebrow reveal">Políticas de seguridad</div>
+  <div class="section-title reveal">La seguridad es<br>nuestra prioridad</div>
+  <div class="seg-grid reveal">
+    <div class="seg-card">
+      <i class="ti ti-shield-check"></i>
+      <p>Proteger la salud y seguridad de todos los colaboradores como prioridad absoluta, asegurando un entorno de trabajo seguro en todas las operaciones.</p>
+    </div>
+    <div class="seg-card">
+      <i class="ti ti-file-certificate"></i>
+      <p>Cumplimiento riguroso con la legislación y regulaciones vigentes en materia de seguridad y salud ocupacional.</p>
+    </div>
+    <div class="seg-card">
+      <i class="ti ti-tool"></i>
+      <p>Correcta selección, mantenimiento y uso de herramientas y equipos, gestionando adecuadamente productos y materiales peligrosos.</p>
+    </div>
+    <div class="seg-card">
+      <i class="ti ti-trending-up"></i>
+      <p>Compromiso con la mejora continua en todas las áreas de seguridad, estableciendo objetivos medibles y revisando regularmente el desempeño.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- CLIENTES -->
+<section id="clientes">
+  <div class="section-eyebrow reveal">Clientes satisfechos</div>
+  <div class="section-title reveal">Confían en<br>SERVIMABING</div>
+  <div class="clients-grid reveal">
+    <div class="client-card"><i class="ti ti-building-factory"></i><div class="cname">Altonorte</div><div class="ctype">Gran minería</div></div>
+    <div class="client-card"><i class="ti ti-road"></i><div class="cname">Autopistas de Antofagasta</div><div class="ctype">Concesionaria vial</div></div>
+    <div class="client-card"><i class="ti ti-anchor"></i><div class="cname">TGN</div><div class="ctype">Terminal Graneles del Norte</div></div>
+    <div class="client-card"><i class="ti ti-crane"></i><div class="cname">Sacyr</div><div class="ctype">Construcción industrial</div></div>
+    <div class="client-card"><i class="ti ti-cpu"></i><div class="cname">Tecnoin</div><div class="ctype">Tecnología industrial</div></div>
+    <div class="client-card"><i class="ti ti-droplet"></i><div class="cname">Aguas Antofagasta</div><div class="ctype">Sanitaria</div></div>
+    <div class="client-card"><i class="ti ti-ship"></i><div class="cname">Puerto Angamos</div><div class="ctype">Mejillones · Chile</div></div>
+  </div>
+  <div class="cert-bar reveal">
+    <i class="ti ti-rosette"></i>
+    <div>
+      <h4>Certificación SICEP</h4>
+      <p>Empresa certificada en el Sistema de Calificación de Empresas Proveedoras (SICEP), habilitados para trabajar con la gran minería chilena.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<div class="contact-section" id="contacto">
+  <div class="contact-inner">
+    <div class="section-eyebrow reveal">Contacto</div>
+    <div class="section-title reveal" style="margin-bottom:0.4rem">Hablemos de<br>su proyecto</div>
+    <p class="reveal" style="font-size:15px;color:var(--text-muted);margin-bottom:0">Respondemos rápido · Atención personalizada · Manuel Alvarado B. y G.</p>
+    <div class="contact-grid reveal">
+      <div class="c-card"><i class="ti ti-phone"></i><div><div class="c-lbl">Celular 1</div><div class="c-val">+56 9 8449 5397</div></div></div>
+      <div class="c-card"><i class="ti ti-phone"></i><div><div class="c-lbl">Celular 2</div><div class="c-val">+56 9 8239 8247</div></div></div>
+      <div class="c-card"><i class="ti ti-mail"></i><div><div class="c-lbl">Correo general</div><div class="c-val">servimabing@gmail.com</div></div></div>
+      <div class="c-card"><i class="ti ti-mail"></i><div><div class="c-lbl">Gerencia</div><div class="c-val">gerencia@servimabing.com</div></div></div>
+      <div class="c-card"><i class="ti ti-briefcase"></i><div><div class="c-lbl">Operaciones</div><div class="c-val">gerenteoperaciones@servimabing.com</div></div></div>
+      <div class="c-card"><i class="ti ti-map-pin"></i><div><div class="c-lbl">Ubicación</div><div class="c-val">Antofagasta, Región de Antofagasta</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<!-- MODAL COTIZACIÓN -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div id="modalForm">
+      <div class="modal-header">
+        <div>
+          <h2 id="modalTitle">Solicitar <span>Cotización</span></h2>
+          <p>Complete el formulario y le responderemos a la brevedad · gerencia@servimabing.com</p>
+        </div>
+        <button class="modal-close" id="modalClose" aria-label="Cerrar"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label for="f-nombre">Nombre *</label><input type="text" id="f-nombre" placeholder="Escribe tu nombre" required></div>
+        <div class="form-group"><label for="f-apellido">Apellido *</label><input type="text" id="f-apellido" placeholder="Escribe tu apellido" required></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label for="f-rut">RUT</label><input type="text" id="f-rut" placeholder="Ej: 12345678-5"></div>
+        <div class="form-group"><label for="f-empresa">Empresa</label><input type="text" id="f-empresa" placeholder="Nombre de su empresa"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label for="f-giro">Giro</label><input type="text" id="f-giro" placeholder="Giro comercial"></div>
+        <div class="form-group"><label for="f-direccion">Dirección</label><input type="text" id="f-direccion" placeholder="Dirección"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label for="f-comuna">Comuna</label><input type="text" id="f-comuna" placeholder="Comuna"></div>
+        <div class="form-group"><label for="f-ciudad">Ciudad</label><input type="text" id="f-ciudad" placeholder="Ciudad"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label for="f-email">E-mail *</label><input type="email" id="f-email" placeholder="Escribe tu e-mail" required></div>
+        <div class="form-group"><label for="f-telefono">Teléfono *</label><input type="tel" id="f-telefono" placeholder="Ej: +56 9 1234 5678" required></div>
+      </div>
+      <div class="form-row full">
+        <div class="form-group">
+          <label for="f-motivo">Motivo de contacto *</label>
+          <select id="f-motivo" required>
+            <option value="">Por favor, elige una opción</option>
+            <option>Trabajos de tornería</option>
+            <option>Trabajos de soldadura</option>
+            <option>Reparación de componentes industriales</option>
+            <option>Reparación de cilindros hidráulicos / neumáticos</option>
+            <option>Fabricación de piezas HDPE</option>
+            <option>Creación de gráficas / señales viales</option>
+            <option>Mantención industrial en terreno</option>
+            <option>Mantención equipos de bombeo</option>
+            <option>Reparación líneas HDPE / PPR</option>
+            <option>Venta de repuestos y herramientas</option>
+            <option>Arriendo grúa horquilla / logística</option>
+            <option>Otro</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row full">
+        <div class="form-group"><label for="f-mensaje">Mensaje *</label><textarea id="f-mensaje" placeholder="Describe tu requerimiento con el mayor detalle posible..." required></textarea></div>
+      </div>
+      <div class="form-submit">
+        <button type="button" id="btnEnviar"><i class="ti ti-send"></i> Enviar cotización</button>
+        <p class="form-note">Se enviará a <strong style="color:var(--gold)">gerencia@servimabing.com</strong><br>Respondemos dentro de 24 horas hábiles.</p>
+      </div>
+    </div>
+    <div class="form-success" id="formSuccess">
+      <i class="ti ti-circle-check"></i>
+      <h3>¡Solicitud enviada!</h3>
+      <p>Su cotización fue enviada a <strong style="color:var(--gold)">gerencia@servimabing.com</strong>.<br>Le responderemos a la brevedad. ¡Gracias por contactar a SERVIMABING!</p>
+      <button class="btn-primary" style="margin-top:1.5rem;border:none;cursor:pointer;font-size:14px;font-weight:700" onclick="closeModal()">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <strong>SERVIMABING SPA</strong> — RUT 77.204.957-9 · Antofagasta, Chile · Desde 2019<br>
+  <span style="margin-top:4px;display:block">Reparaciones · Ventas · Servicios · Gráficas · Mantenciones · Maestranza</span>
+</footer>
+
+<script>
+// ── SERVICIOS DATA ──
+const servicios = {
+  taller: [
+    {icon:'ti-tool',t:'Tornería',d:'Fabricación de piezas especializadas a medida'},
+    {icon:'ti-flame',t:'Soldadura',d:'Estructuras personalizadas, letreros, señalizaciones y reparaciones'},
+    {icon:'ti-settings',t:'Componentes industriales',d:'Reparación de bombas y recuperación de reductores'},
+    {icon:'ti-cylinder',t:'Cilindros hidráulicos',d:'Mantención y reparación de sistemas hidráulicos y neumáticos'},
+    {icon:'ti-box',t:'Piezas HDPE',d:'Fabricación de piezas en polietileno de alta densidad'},
+    {icon:'ti-palette',t:'Gráficas y señales',d:'Diseño, producción y fabricación de señalización vial'},
+  ],
+  terreno: [
+    {icon:'ti-building-factory',t:'Mantenimiento industrial',d:'Servicios de mantención integral en instalaciones industriales'},
+    {icon:'ti-users',t:'Especialistas en terreno',d:'Equipo de especialistas para intervenciones in situ'},
+    {icon:'ti-alert-triangle',t:'Detenciones de planta',d:'Trabajos en paradas con equipo multidisciplinario'},
+    {icon:'ti-droplet',t:'Equipos de bombeo',d:'Mantención preventiva y correctiva de equipos de bombeo'},
+    {icon:'ti-line-dashed',t:'Líneas HDPE / PPR',d:'Reparación de líneas de polietileno y polipropileno en terreno'},
+  ],
+  ventas: [
+    {icon:'ti-package',t:'Repuestos',d:'Variedad de repuestos para equipos industriales'},
+    {icon:'ti-hammer',t:'Herramientas',d:'Venta de herramientas industriales y de taller'},
+    {icon:'ti-tool',t:'Piezas de tornería',d:'Piezas fabricadas según especificaciones del cliente'},
+    {icon:'ti-shopping-cart',t:'Insumos',d:'Venta de insumos para mantenimiento industrial'},
+    {icon:'ti-building-store',t:'Ferretería',d:'Amplio catálogo de ferretería industrial'},
+  ],
+  logistica: [
+    {icon:'ti-truck',t:'Servicio de logística',d:'Traslado de materiales, insumos y equipos industriales'},
+    {icon:'ti-forklift',t:'Arriendo grúa horquilla',d:'Carga y descarga para diferentes tipos de industria'},
+  ],
+  graficas: [
+    {icon:'ti-road-sign',t:'Señales viales',d:'Fabricación completa de señalización vial reglamentaria'},
+    {icon:'ti-palette',t:'Gráficas personalizadas',d:'Diseño y producción de gráficos para empresa y faenas'},
+    {icon:'ti-triangle-square-circle',t:'Letreros industriales',d:'Señalización industrial, preventiva e informativa'},
+  ]
+};
+
+const grid = document.getElementById('srv-grid');
+const tabs = document.querySelectorAll('.tab');
+
+function renderServices(cat) {
+  grid.innerHTML = servicios[cat].map(s => `
+    <div class="srv-card">
+      <div class="srv-icon"><i class="ti ${s.icon}" aria-hidden="true"></i></div>
+      <h3>${s.t}</h3><p>${s.d}</p>
+    </div>`).join('');
+}
+renderServices('taller');
+
+tabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    tabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    renderServices(tab.dataset.cat);
+  });
+});
+
+// ── SCROLL REVEAL ──
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ── MODAL ──
+const overlay = document.getElementById('modalOverlay');
+
+function openModal() {
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+  setTimeout(() => {
+    document.getElementById('modalForm').style.display = '';
+    document.getElementById('formSuccess').style.display = 'none';
+  }, 300);
+}
+
+document.querySelectorAll('.nav-cta, a.btn-primary').forEach(btn => {
+  btn.addEventListener('click', e => { e.preventDefault(); openModal(); });
+});
+document.getElementById('modalClose').addEventListener('click', closeModal);
+overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+document.getElementById('btnEnviar').addEventListener('click', async () => {
+  const nombre   = document.getElementById('f-nombre').value.trim();
+  const apellido = document.getElementById('f-apellido').value.trim();
+  const email    = document.getElementById('f-email').value.trim();
+  const telefono = document.getElementById('f-telefono').value.trim();
+  const motivo   = document.getElementById('f-motivo').value;
+  const mensaje  = document.getElementById('f-mensaje').value.trim();
+
+  if (!nombre || !apellido || !email || !telefono || !motivo || !mensaje) {
+    alert('Por favor completa todos los campos obligatorios (*).');
+    return;
+  }
+
+  const rut       = document.getElementById('f-rut').value.trim();
+  const empresa   = document.getElementById('f-empresa').value.trim();
+  const giro      = document.getElementById('f-giro').value.trim();
+  const direccion = document.getElementById('f-direccion').value.trim();
+  const comuna    = document.getElementById('f-comuna').value.trim();
+  const ciudad    = document.getElementById('f-ciudad').value.trim();
+
+  const btn = document.getElementById('btnEnviar');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="ti ti-loader-2" style="animation:spin 1s linear infinite;display:inline-block"></i> Enviando...';
+
+  const subject = encodeURIComponent(`Cotizacion SERVIMABING - ${nombre} ${apellido} - ${motivo}`);
+  const body = encodeURIComponent(
+`NUEVA SOLICITUD DE COTIZACION - SERVIMABING SPA
+================================================
+Nombre:    ${nombre} ${apellido}
+RUT:       ${rut || '(no indicado)'}
+Empresa:   ${empresa || '(no indicado)'}
+Giro:      ${giro || '(no indicado)'}
+Direccion: ${direccion || '(no indicado)'}
+Comuna:    ${comuna || '(no indicado)'}
+Ciudad:    ${ciudad || '(no indicado)'}
+E-mail:    ${email}
+Telefono:  ${telefono}
+
+Motivo:    ${motivo}
+
+Mensaje:
+${mensaje}
+`);
+
+  window.location.href = `mailto:gerencia@servimabing.com?subject=${subject}&body=${body}`;
+
+  setTimeout(() => {
+    document.getElementById('modalForm').style.display = 'none';
+    document.getElementById('formSuccess').style.display = 'block';
+    btn.disabled = false;
+    btn.innerHTML = '<i class="ti ti-send"></i> Enviar cotizacion';
+  }, 800);
+});
+
+const spinStyle = document.createElement('style');
+spinStyle.textContent = '@keyframes spin { to { transform: rotate(360deg); } }';
+document.head.appendChild(spinStyle);
+</script>
+</body>
+</html>
+subirpagina web
